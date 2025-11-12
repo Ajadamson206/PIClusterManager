@@ -1,8 +1,10 @@
 import ctypes
+import struct
 from typing import Tuple
+import numpy as np
 
 
-def parseData(data: bytes, address: Tuple[str, int]) -> dict:
+def parseData(data: bytes, address: Tuple[str, int]) -> Tuple[int, tuple]:
     """
     Parse the incoming data packet from the Pico.
 
@@ -13,27 +15,52 @@ def parseData(data: bytes, address: Tuple[str, int]) -> dict:
     """
     if len(data) < 4:
         print(f"Data packet from ({address}) is too short to contain version information.")
-        return {}
+        return (0, ())
     
-    # Version is a 32-bit integer
-    version = int(data[0]<<24 | data[1]<<16 | data[2]<<8 | data[3])
+    version, = struct.unpack_from('<I', data, 0)
+    print("Header:", version)
+
 
     if version == 1:
-        return version1(data)
+        return (1, version1(data[4:]))
     elif version == 2:
-        return version2(data)
+        return (2, version2(data[4:]))
     elif version == 3:
-        return version3(data)
+        return (3, version3(data[4:]))
     else:
         print(f"Unrecognized version ({version}) from ({address}).")
-        return {}
+        return (0, ())
 
 
-def version1(data: bytes) -> dict:
-    pass
+def version1(data: bytes) -> tuple:
+    if len(data) != 8:
+        print("Invalid data length for version 1.")
+        return ()
+ 
+    parsedData = struct.unpack_from('<d', data, 0)
+ 
+    print("Values:", parsedData)
+    
+    return parsedData
 
-def version2(data: bytes) -> dict:
-    pass
+def version2(data: bytes) -> tuple:
+    if len(data) != 40:
+        print("Invalid data length for version 2.")
+        return ()
+    
+    parsedData = struct.unpack_from('<5d', data, 0)
 
-def version3(data: bytes) -> dict:
-    pass
+    print("Values:", parsedData)
+
+    return parsedData
+
+def version3(data: bytes) -> tuple:
+    if len(data) != 48:
+        print("Invalid data length for version 3.")
+        return ()
+    
+    parsedData = struct.unpack_from('<6d', data, 0)
+
+    print("Values:", parsedData)
+    
+    return parsedData

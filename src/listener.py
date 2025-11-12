@@ -1,7 +1,8 @@
 
 import socket
 from dbconnect import DBConnect
-
+from parser import parseData
+import struct
 
 class Listener:
     def __init__(self, port: int, db_loc: str, host: str):
@@ -32,3 +33,5 @@ class Listener:
                 # Parse the data received
 
                 print(f"Received data from {address}: {buffer}")
+                parsed_data = parseData(buffer, address)
+                print(f"Parsed data: {parsed_data}")

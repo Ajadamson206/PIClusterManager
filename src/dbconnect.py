@@ -64,6 +64,47 @@ class DBConnect:
             print(f"Error fetching device count: {e}")
             return 0
 
+    def findDeviceID(self, ip_address: str) -> int:
+        try:
+            self.cursor.execute(
+                "SELECT Device_ID FROM networkDevices WHERE Device_ID = ?;",
+                (ip_address,)
+            )
+            result = self.cursor.fetchone()
+            if result:
+                return int(result[0])
+            else:
+                return -1
+        except sqlite3.Error as e:
+            print(f"Error finding device ID for {ip_address}: {e}")
+            return -1
+
+    def updateIPaddress(self, mac_address: str, ip_address: str):
+        try:
+            self.cursor.execute(
+                "UPDATE networkDevices SET Device_ID = ? WHERE MAC_Address = ?;",
+                (ip_address, mac_address)
+            )
+            self.conn.commit()
+        except sqlite3.Error as e:
+            print(f"Error updating IP address for {mac_address}: {e}")
+
+    def updateBatteryLife(self, ip_address: str, battery_life: float):
+        try:
+            # Find the deviceID by IP
+            deviceId = self.findDeviceID(ip_address)
+            if deviceId == -1:
+                print(f"Device with IP {ip_address} not found.")
+                return
+
+            self.cursor.execute(
+                "UPDATE networkDevices SET Battery_Level = ? WHERE Device_ID = ?;",
+                (battery_life, deviceId)
+            )
+            self.conn.commit()
+        except sqlite3.Error as e:
+            print(f"Error updating battery life for {ip_address}: {e}")
+
     def close(self):
         if self.conn:
             self.conn.close()
