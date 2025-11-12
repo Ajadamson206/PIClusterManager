@@ -1,15 +1,67 @@
+#!/usr/bin/env python3
+
+import argparse
+import json
+
+from listener import Listener
+
 # Cluster Manager Made to be ran on the Central Raspberry PI 4
+
 
 """
     0. Read configuration file for settings
         db_loc: {file_path}     # File path to the location of the SQL file
         port_num: {1-65535}     # Port number to listen on for Pico Data
 
-    1. Listen on Port 20000 for data from the Picos
+    1. Connect to SQL and verify tables
+        SQL:
+            Connect to the databse located at {db_loc}
+            If no database is found create it from scratch
+        
+        Tables:
+            plotData(Plot_ID, datetime, light, humidity, moisture, air_temp, soil_temp)
+            networkDevices(Device_ID, MAC Address, Device Name, Solar/Battery, Battery Level, Plot_ID, IsOnline)
+            averages(Plot_ID, average_type {Daily, Weekly, Monthly}, light, humidity, moisture, air_temp, soil_temp)
+            
+    2. Listen on Port {port_num} for data from the Picos
 
-    2. Write the data to an SQL server (SQLite3)
-        -> Data is formatted like this (light, humidity, moisture, air temp, soil temp)
+    3. Parse the Data Sent by the Pico
+        ->  Couple different formats of data packet starts off with an 8-bit 'Version'
+            which explains what data was sent
+                - 1: (battery_life)
+                - 2: (light, humidity, moisture, air_temp, soil_temp)
+                - 3: (battery_life, light, humidity, moisture, air_temp, soil_temp)
+        ->  Looks something like this: 
+                (1/2/3, ...)
 
+    4. Convert the parsed data into an SQL Query for the respective table
+        ->  Pull the Device_ID and Plot_ID via the device's MAC address
+                - select Plot_ID, Device_ID from plotInfo where MAC = ?
+        ->  Update battery life in networkDevices
+                - 
+        ->  
 
+    5. Validate and Send the query
 
 """
+
+def main():
+    # Parse configuration file
+    parser = argparse.ArgumentParser(description="Pi Cluster Manager for Raspberry Pi 4")
+    parser.add_argument('-c','--config', type=str, default="/etc/cluster-manager/config.json", help='Path to the configuration file')
+    args = parser.parse_args()
+
+    # Load configuration file
+    with open(args.config, 'r') as f:
+        config = json.load(f)
+
+    db_loc = config["db_loc"]
+    port_num = config["port_num"]
+    host = config["host"]
+
+    # Use Listener to handle incoming data
+    listener = Listener(port_num, db_loc, host)
+    listener.main_loop()
+
+if __name__ == "__main__":
+    main()

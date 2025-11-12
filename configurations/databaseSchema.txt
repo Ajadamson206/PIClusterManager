@@ -1,0 +1,3 @@
+plotData(Plot_ID, datetime, light, humidity, moisture, air_temp, soil_temp)
+networkDevices(Device_ID, MAC Address, Device Name, Solar/Battery, Battery Level, Plot_ID, IsOnline)
+averages(Plot_ID, average_type {Daily, Weekly, Monthly}, light, humidity, moisture, air_temp, soil_temp)
