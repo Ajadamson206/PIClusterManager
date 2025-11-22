@@ -9,6 +9,11 @@ from listener import Listener
 
 
 """
+
+    Each pico will monitor light, soil temp, soil moisture.
+    
+    Temperature, air humidity will be monitored by a central sensor.
+
     0. Read configuration file for settings
         db_loc: {file_path}     # File path to the location of the SQL file
         port_num: {1-65535}     # Port number to listen on for Pico Data

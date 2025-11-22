@@ -1,0 +1,5 @@
+garden-server
+RaspberryPiGear123
+
+Packages:
+dnsmasq hostapd dhcpcd
