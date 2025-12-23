@@ -1,0 +1,16 @@
+The configuration file for the program should be in JSON format, and should have the following key-value pairs
+
+"db_loc": PATH to the SQL-LITE (Including filename)
+    ex. "db_loc": "/srv/grarden/sql.db"
+
+"port_num": port number the program should listen on
+    ex. "port_num": 5000
+
+"host": IP address the socket should bind to
+    ex. "host": "127.0.0.1" (For local testing only)
+        "host": "0.0.0.0" (For broadcasting)
+
+"adapter": The adapter that will be used to connect to the picos
+    ** Find the adapters with "ip addr" command
+    ex. "adapter": "wlan0" (Wireless adapter)
+        "adapter": "enp10s0" (Example ethernet adapter)

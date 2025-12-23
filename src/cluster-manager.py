@@ -63,9 +63,10 @@ def main():
     db_loc = config["db_loc"]
     port_num = config["port_num"]
     host = config["host"]
+    adapter = config["adapter"]
 
     # Use Listener to handle incoming data
-    listener = Listener(port_num, db_loc, host)
+    listener = Listener(port_num, db_loc, host, adapter)
     listener.main_loop()
 
 if __name__ == "__main__":
