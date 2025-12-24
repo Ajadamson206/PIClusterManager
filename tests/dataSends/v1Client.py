@@ -5,11 +5,19 @@
 
 import socket
 import struct
+import json
 
 clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 clientsocket.connect(("localhost", 5000))
 
-raw_data = struct.pack('<Id', 1, 1.23)
+dict = {
+    "light": 20,
+    "moisture": 30,
+    "soil Temp": 40,
+    "humidity": 50,
+    "air temperature": 60,
+    "battery": 70
+}
 
-clientsocket.send(raw_data)
+clientsocket.send(bytes(json.dumps(dict), 'utf-8'))
 clientsocket.close()

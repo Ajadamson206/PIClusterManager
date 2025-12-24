@@ -32,11 +32,17 @@ class Listener:
         # Main listening loop to handle incoming data
         while True:
             connection, address = self.socket.accept()
-            buffer = connection.recv(512)
 
-            if len(buffer) > 0:
+            # None of the packets should be greater than 1024 bytes
+            buffer = connection.recv(1024)
+            numBytes = len(buffer)
+
+            # Indicates that the client has disconnected
+            if numBytes == 0:
+                pass
+            
+            else:
                 # Parse the data received
-
                 print(f"Received data from {address}: {buffer}")
                 parsed_data = parseData(buffer, address)
                 print(f"Parsed data: {parsed_data}")

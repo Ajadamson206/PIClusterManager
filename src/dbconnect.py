@@ -1,4 +1,5 @@
 import sqlite3
+from logger import globalLogger
 
 class DBConnect:
     def __init__(self, db_loc):
@@ -8,8 +9,8 @@ class DBConnect:
             self.conn = sqlite3.connect(self.db_loc)
             self.cursor = self.conn.cursor()
         except sqlite3.Error as e:
-            print(f"Error connecting to database: {e}")
-            raise FileExistsError("Database connection failed at " + db_loc + "\nCheck if the path is correct and writable.")
+            globalLogger.logCriticalError(f"Error connecting to database: {e}\nExiting...")
+            exit(1)
 
     def verifyTables(self):
         # Verify and create tables if they do not exist
@@ -54,14 +55,14 @@ class DBConnect:
                 self.cursor.execute(query)
                 self.conn.commit()
             except sqlite3.Error as e:
-                print(f"Error creating table {table_name}: {e}")
+                globalLogger.logError(f"Error creating table {table_name}: {e}")
 
     def getCountOfDevices(self) -> int:
         try:
             self.cursor.execute("SELECT COUNT(*) FROM networkDevices;")
             return int(self.cursor.fetchone()[0])
         except sqlite3.Error as e:
-            print(f"Error fetching device count: {e}")
+            globalLogger.logError(f"Error fetching device count: {e}")
             return 0
 
     def findDeviceID(self, ip_address: str) -> int:
@@ -76,20 +77,22 @@ class DBConnect:
             else:
                 return -1
         except sqlite3.Error as e:
-            print(f"Error finding device ID for {ip_address}: {e}")
+            globalLogger.logError(f"Error finding device ID for {ip_address}: {e}")
             return -1
 
-    def updateIPaddress(self, mac_address: str, ip_address: str):
+    def updateIPaddress(self, mac_address: str, ip_address: str) -> bool:
         try:
             self.cursor.execute(
                 "UPDATE networkDevices SET Device_ID = ? WHERE MAC_Address = ?;",
                 (ip_address, mac_address)
             )
             self.conn.commit()
+            return True
         except sqlite3.Error as e:
-            print(f"Error updating IP address for {mac_address}: {e}")
+            globalLogger.logError(f"Error updating IP address for {mac_address}: {e}")
+            return False
 
-    def updateBatteryLife(self, ip_address: str, battery_life: float):
+    def updateBatteryLife(self, ip_address: str, battery_life: float) -> bool:
         try:
             # Find the deviceID by IP
             deviceId = self.findDeviceID(ip_address)
@@ -102,8 +105,10 @@ class DBConnect:
                 (battery_life, deviceId)
             )
             self.conn.commit()
+            return True
         except sqlite3.Error as e:
-            print(f"Error updating battery life for {ip_address}: {e}")
+            globalLogger.logError(f"Error updating battery life for {ip_address}: {e}")
+            return False
 
     def close(self):
         if self.conn:
