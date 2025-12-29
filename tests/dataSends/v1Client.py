@@ -13,9 +13,9 @@ clientsocket.connect(("localhost", 5000))
 dict = {
     "light": 20,
     "moisture": 30,
-    "soil Temp": 40,
+    "soil_temp": 40,
     "humidity": 50,
-    "air temperature": 60,
+    "air_temp": 60,
     "battery": 70
 }
 

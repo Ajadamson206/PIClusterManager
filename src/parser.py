@@ -10,15 +10,12 @@ def parseData(data: bytes, address: Tuple[str, int]) -> dict:
     {
     light: level
     moisture: level
-    soil Temp: level
+    soil_temp: level
     humidity: level
-    air temperature: Level
+    air_temp: Level
     battery: level
-
     }
-
-
-
+    
     """
     
     print(data)

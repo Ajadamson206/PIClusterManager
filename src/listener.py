@@ -24,9 +24,13 @@ class Listener:
             exit(1)
         
         # Initialize listener socket
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.socket.bind((self.host, self.port))
-        self.socket.listen(self.db.getCountOfDevices() + 3)  # Allow some extra connections
+        try:
+            self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.socket.bind((self.host, self.port))
+            self.socket.listen(self.db.getCountOfDevices() + 3)  # Allow some extra connections
+        except Exception as e:
+            globalLogger.logCriticalError(f"Failed to initialize listener socket: {e}")
+            exit(1)
 
     def main_loop(self):
         # Main listening loop to handle incoming data
@@ -46,6 +50,10 @@ class Listener:
                 print(f"Received data from {address}: {buffer}")
                 parsed_data = parseData(buffer, address)
                 print(f"Parsed data: {parsed_data}")
+
+                # Add the data to the database
+                if self.db.addGardenData(address[0], parsed_data):
+                    print("Successfully added the Data")
 
     def getDHCPAddresses(self, file="/var/lib/misc/dnsmasq.leases") -> List[str] | List[None]:
         picos = []
