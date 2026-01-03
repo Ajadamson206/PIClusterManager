@@ -2,11 +2,10 @@
 import socket
 from typing import List
 from dbconnect import DBConnect
-from parser import parseData
 import netifaces
 from pathlib import Path
 from logger import globalLogger
-
+import json
 
 class Listener:
     def __init__(self, port: int, db_loc: str, host: str, adapter: str):
@@ -48,7 +47,7 @@ class Listener:
             else:
                 # Parse the data received
                 print(f"Received data from {address}: {buffer}")
-                parsed_data = parseData(buffer, address)
+                parsed_data = json.loads(buffer)
                 print(f"Parsed data: {parsed_data}")
 
                 # Add the data to the database

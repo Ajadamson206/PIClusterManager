@@ -52,7 +52,9 @@ from listener import Listener
 
 def main():
     # Parse configuration file
-    parser = argparse.ArgumentParser(description="Pi Cluster Manager for Raspberry Pi 4")
+    parser = argparse.ArgumentParser(
+                        prog='Cluster-Manager',
+                        description="Pi Cluster Manager for Raspberry Pi 4")
     parser.add_argument('-c','--config', type=str, default="/etc/cluster-manager/config.json", help='Path to the configuration file')
     args = parser.parse_args()
 

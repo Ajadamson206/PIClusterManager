@@ -7,8 +7,17 @@ class DBConnect:
         self.db_loc = db_loc
 
         try:
-            self.conn = sqlite3.connect(self.db_loc)
+            self.conn = sqlite3.connect(self.db_loc, timeout=30, isolation_level=None)
             self.cursor = self.conn.cursor()
+
+            # Enable WAL mode (persistent)
+            self.cursor.execute("PRAGMA journal_mode=WAL;")
+            
+            self.cursor.execute("PRAGMA synchronous=NORMAL;")
+            self.cursor.execute("PRAGMA foreign_keys=ON;")
+
+            self.conn.execute("PRAGMA busy_timeout=30000;")  # 30 seconds
+
         except sqlite3.Error as e:
             globalLogger.logCriticalError(f"Error connecting to database: {e}\nExiting...")
             exit(1)
@@ -163,7 +172,6 @@ class DBConnect:
             # }
 
             if "battery" in data:
-                print("Updating Battery")
                 self.updateBatteryLife(deviceID, float(data["battery"]))
 
             # time DATETIME,
