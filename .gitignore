@@ -210,3 +210,6 @@ __marimo__/
 config/
 logs/
 build/
+
+# Tools Outputs
+tools/register.txt

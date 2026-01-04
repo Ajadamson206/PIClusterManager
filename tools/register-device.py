@@ -33,9 +33,59 @@ def noArguments():
         print("Modify register.txt with your settings than execute: sudo register -f register.txt")
         print("Or use the following command for help: register --help")
     
-    except :
+    except:
         print("Unable to create file register.txt")
         print("Use the following command for help: register --help")
+
+def settingsParse(filePath: str) -> dict:
+    settings = ["mac_address=", "device_name=", "power_source=", "plotid="]
+
+    retDict = {}
+
+    try:
+        with open(filePath, 'r') as file:
+            for line in file.readlines():
+                foundSetting = False
+                for setting in settings:
+                    if line.startswith(setting):
+                        foundSetting = True
+                        line = line.strip(setting)
+
+                        if len(line) == 0:
+                            print(f"No value set for {setting}. Exiting")
+                            exit(1)
+
+                        settings.pop(setting)
+                        setting = setting.replace('=', '')
+
+                        retDict.update({setting: line})
+                        foundSetting = True
+                        break
+                
+                if not foundSetting:
+                    print(f"Unknown setting: {line}")
+                    print("Ignoring...")
+        
+        if len(setting) != 0:
+            print(f"Missing lines: {settings}")
+            exit(1)
+
+        return retDict
+
+    except:
+        print("Unable to read from file. Exiting")
+        exit(1)
+
+def updateMACFilter(macAddress: str):
+    hostapdAcceptPath = "/etc/hostapd/hostapd.accept"
+
+    try:
+        with open(hostapdAcceptPath, 'a') as file:
+            file.write(f"{macAddress}\n")
+        print("Successfully updated MAC Address Filter")
+    except:
+        print("Unable to update MAC Address Filter")
+        exit(1)
 
 def main():
     parser = argparse.ArgumentParser(
@@ -66,12 +116,24 @@ def main():
         print("This command needs root privilleges to run. Execute it again with sudo")
         return
 
+    # Parse the Settings depending on the passed parameters
     if args.file:
-        pass
+        deviceOptions = settingsParse()
     elif args.mac_address and args.name and args.power_source and args.plotid:
-        pass
+        deviceOptions = {}
+        deviceOptions.update({"mac_address": args.mac_address})
+        deviceOptions.update({"device_name": args.name})
+        deviceOptions.update({"power_source": args.power_source})
+        deviceOptions.update({"plotid": args.plotid})
     else:
-        pass
+        noArguments()
+        return
+
+    # Update MAC Address Filter
+    updateMACFilter(deviceOptions['mac_address'])
+
+    # Update the DB
+    
 
 if __name__ == "__main__":
     main()
