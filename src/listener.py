@@ -46,13 +46,20 @@ class Listener:
             
             else:
                 # Parse the data received
-                print(f"Received data from {address}: {buffer}")
-                parsed_data = json.loads(buffer)
-                print(f"Parsed data: {parsed_data}")
+                globalLogger.logDebug(f"Received data from {address}: {buffer}")
+
+                try:
+                    parsed_data = json.loads(buffer)
+                except json.JSONDecodeError:
+                    globalLogger.logWarning(f"JSONDecodeError: Message from {address} does not contain valid JSON")
+                    continue
+                except UnicodeDecodeError:
+                    globalLogger.logWarning(f"UnicodeDecodeError: Message from {address} is not in any known UTF format")
+                    continue
 
                 # Add the data to the database
                 if self.db.addGardenData(address[0], parsed_data):
-                    print("Successfully added the Data")
+                    globalLogger.logDebug("Successfully added the Data")
 
     def getDHCPAddresses(self, file="/var/lib/misc/dnsmasq.leases") -> List[str] | List[None]:
         picos = []

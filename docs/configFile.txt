@@ -14,3 +14,11 @@ The configuration file for the program should be in JSON format, and should have
     ** Find the adapters with "ip addr" command
     ex. "adapter": "wlan0" (Wireless adapter)
         "adapter": "enp10s0" (Example ethernet adapter)
+
+"loglevel": The level of logging that you want
+    "loglevel": 0 -> All logs (Including Debug) will be logged
+    "loglevel": 1 -> (Default) Hides Debug Logs
+    "loglevel": 2 -> Hides debug and warning logs
+
+    NOTE: Errors and Critical Logs cannot be hidden
+    NOTE: Values not in the [0-2] range will default to 1

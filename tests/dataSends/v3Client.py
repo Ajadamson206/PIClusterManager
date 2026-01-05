@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-# Version 3: (3, battery_life, light, humidity, moisture, air_temp, soil_temp)
-# (uint32, f64, f64, f64, f64, f64, f64)
+# Send Data that should raise a Unicode Error 
 
 import socket
 import struct

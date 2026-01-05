@@ -44,8 +44,7 @@ class DBConnect:
                     Device_Name TEXT,
                     Power_Source TEXT,
                     Battery_Level REAL,
-                    Plot_ID INTEGER,
-                    IsOnline BOOLEAN
+                    Plot_ID INTEGER
                 );
             """,
             "averages": """
@@ -78,11 +77,10 @@ class DBConnect:
             # Power_Source TEXT,
             # Battery_Level REAL,
             # Plot_ID INTEGER,
-            # IsOnline BOOLEAN
 
             self.cursor.execute(
                 "INSERT INTO networkDevices VALUES (?, ?, ?, ?, ?, ?, ?, ?);",
-                (0, "FF:FF:FF:FF:FF:FF", "127.0.0.1", "Server", "Wall Power", 100.0, 0, True)
+                (0, "FF:FF:FF:FF:FF:FF", "127.0.0.1", "Server", "Wall Power", 100.0, 0)
             )
             self.conn.commit()
 

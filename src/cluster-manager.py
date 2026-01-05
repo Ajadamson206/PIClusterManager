@@ -2,6 +2,7 @@
 
 import argparse
 import json
+from logger import globalLogger
 
 from listener import Listener
 
@@ -66,6 +67,20 @@ def main():
     port_num = config["port_num"]
     host = config["host"]
     adapter = config["adapter"]
+
+    # Determine the log level
+    if "loglevel" in config and 0 <= config["loglevel"] <= 2:
+        loglevel = config["loglevel"]
+       
+        if loglevel == 1:
+            globalLogger.hideDebug()
+        elif loglevel == 2:
+            globalLogger.hideWarning()
+
+        globalLogger.logDebug(f"loglevel: {loglevel}")
+    else:
+        globalLogger.hideDebug()
+        globalLogger.logWarning("Unknown loglevel: defaulting to 1")
 
     # Use Listener to handle incoming data
     listener = Listener(port_num, db_loc, host, adapter)

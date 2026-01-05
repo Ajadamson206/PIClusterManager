@@ -1,15 +1,20 @@
 #!/usr/bin/env python3
 
-# Version 2: (2, light, humidity, moisture, air_temp, soil_temp)
-# (uint32, f64, f64, f64, f64, f64)
+# Send an improper formatted JSON output
 
 import socket
-import struct
+import json
 
 clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 clientsocket.connect(("localhost", 5000))
 
-raw_data = struct.pack('<Iddddd', 2, 1.23, 2.4, 3.5, 4.6, 5.7)
-
-clientsocket.send(raw_data)
+dict = """{
+    "light": 20,
+    "moisture": 30,
+    "soil_temp": 40,
+    "humidity": 50,
+    "air_temp": 60
+    "battery": 70
+"""
+clientsocket.send(bytes(dict, 'utf-8'))
 clientsocket.close()

@@ -1,0 +1,18 @@
+The Project introduces a Syslog compatible logging system that uses 4 main levels...
+    Debug: No Severity, logs byte buffers and when data is successfully added
+
+    
+    Warning: Low Severity, examples include mismatched data coming from the clients
+    
+    Error: Medium Severity, The program still continues to run, but could eventually lead to undefined behaviors if it goes on for too long
+    
+    Critical: High Severity, Something is preventing the program from executing further and the program crashed.
+        Examples-Invalid Permissions for the database
+
+Different Log Levels could be hidden depending on the input parameter passed into the program
+    See configFile.txt for more information
+
+Development Notes:
+    It is suggested that the logger is to be used rather than the conventional print statement
+
+    This helps users control the amount of information that they want to see
