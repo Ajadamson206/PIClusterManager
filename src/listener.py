@@ -6,6 +6,7 @@ import netifaces
 from pathlib import Path
 from logger import globalLogger
 import json
+from localapi import AdminPanel
 
 class Listener:
     def __init__(self, port: int, db_loc: str, host: str, adapter: str):
@@ -30,6 +31,10 @@ class Listener:
         except Exception as e:
             globalLogger.logCriticalError(f"Failed to initialize listener socket: {e}")
             exit(1)
+
+        # Initialize the Admin Control
+        self.admin = AdminPanel(self.db)
+
 
     def main_loop(self):
         # Main listening loop to handle incoming data
@@ -56,6 +61,10 @@ class Listener:
                 except UnicodeDecodeError:
                     globalLogger.logWarning(f"UnicodeDecodeError: Message from {address} is not in any known UTF format")
                     continue
+
+                # Admin Messages
+                if address[0] == "127.0.0.1":
+                    self.admin.adminMessage(parsed_data)
 
                 # Add the data to the database
                 if self.db.addGardenData(address[0], parsed_data):

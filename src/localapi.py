@@ -51,3 +51,27 @@ CREATE TABLE IF NOT EXISTS averages (
 # Output
 # { "Success": "True" }
 # { "Failure": "Error Message" }
+
+from dbconnect import DBConnect
+from logger import globalLogger
+
+class AdminPanel:
+    def __init__(self, db: DBConnect):
+        self.db = db
+
+    def registerDevice(self, data: dict):
+        pass
+
+    def registerPlot(self, data: dict):
+        pass
+
+    def adminMessage(self, data: dict):
+        globalLogger.logDebug("Calling Admin Panel")
+
+        if "register" in data:
+            if data["register"] == "netDevice":
+                self.registerDevice(data)
+            elif data["register"] == "plot":
+                self.registerPlot(data)
+            else:
+                globalLogger.logWarning(f"Unknown register type: {data['register']}")

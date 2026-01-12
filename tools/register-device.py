@@ -19,6 +19,8 @@
 
 import argparse
 import os
+import socket
+import json
 
 def noArguments():
     # Tell user that they did not enter any arguments
@@ -133,7 +135,13 @@ def main():
     updateMACFilter(deviceOptions['mac_address'])
 
     # Update the DB
-    
+    deviceOptions.update({"register": "netDevice"})
+
+    clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    clientsocket.connect(("localhost", 5000))
+
+    clientsocket.send(bytes(json.dumps(deviceOptions), 'utf-8'))
+    clientsocket.close()
 
 if __name__ == "__main__":
     main()
