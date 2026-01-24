@@ -79,7 +79,7 @@ class DBConnect:
             # Plot_ID INTEGER,
 
             self.cursor.execute(
-                "INSERT INTO networkDevices VALUES (?, ?, ?, ?, ?, ?, ?, ?);",
+                "INSERT INTO networkDevices VALUES (?, ?, ?, ?, ?, ?, ?);",
                 (0, "FF:FF:FF:FF:FF:FF", "127.0.0.1", "Server", "Wall Power", 100.0, 0)
             )
             self.conn.commit()
@@ -113,7 +113,7 @@ class DBConnect:
             if result:
                 return int(result[0])
             else:
-                globalLogger.logWarning(f"No Device ID found for {ip_address}: {e}")
+                globalLogger.logWarning(f"No Device ID found for {ip_address}")
                 return -1
         except sqlite3.Error as e:
             globalLogger.logError(f"Error finding device ID for {ip_address}: {e}")
