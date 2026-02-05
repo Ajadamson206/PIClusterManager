@@ -114,4 +114,4 @@ class Listener:
         broadcast = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
         for pico in picos:
-            broadcast.sendto(ip[0]['addr'] + str(self.port), (pico, 9000))
+            broadcast.sendto((ip[0]['addr'] + str(self.port)).encode(), (pico, 9000))

@@ -25,10 +25,16 @@ class DBConnect:
     def verifyTables(self):
         # Verify and create tables if they do not exist
         table_creation_queries = {
+            "plots": """
+                CREATE TABLE IF NOT EXISTS plots (
+                    Plot_ID INTEGER PRIMARY KEY,
+                    name TEXT
+                );
+            """,
             "plotData": """
                 CREATE TABLE IF NOT EXISTS plotData (
                     Plot_ID INTEGER,
-                    time DATETIME,
+                    time DATETIME NOT NULL,
                     light REAL,
                     humidity REAL,
                     moisture REAL,
@@ -57,6 +63,10 @@ class DBConnect:
                     air_temp REAL,
                     soil_temp REAL
                 );
+            """,
+            "time_index": """
+                CREATE INDEX IF NOT EXISTS idx_plotData_plot_time
+                    ON plotData(Plot_ID, time DESC);
             """
         }
 
@@ -77,6 +87,12 @@ class DBConnect:
             # Power_Source TEXT,
             # Battery_Level REAL,
             # Plot_ID INTEGER,
+
+            self.cursor.execute(
+                "INSERT INTO plots VALUES (?, ?);",
+                (0, "Default")
+            )
+            self.conn.commit()
 
             self.cursor.execute(
                 "INSERT INTO networkDevices VALUES (?, ?, ?, ?, ?, ?, ?);",
