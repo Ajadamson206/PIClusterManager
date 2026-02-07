@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -e
+
+exec /usr/local/lib/garden-cluster/.venv/bin/python -m garden.cluster_manager

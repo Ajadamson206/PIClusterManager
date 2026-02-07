@@ -1,0 +1,30 @@
+[Unit]
+Description=Raspberry Pi Pico Garden Monitoring System
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=picos
+Group=picos
+
+WorkingDirectory=/usr/local/lib/garden-cluster
+ExecStart=/usr/local/bin/garden-cluster-manager.sh
+
+Restart=always
+RestartSec=2
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+
+# Security hardening (safe defaults)
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+ReadWritePaths=/var/lib/garden /var/log/garden
+
+[Install]
+WantedBy=multi-user.target
+

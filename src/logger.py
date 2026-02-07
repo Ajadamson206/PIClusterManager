@@ -19,23 +19,23 @@ class Logger:
     def _logFunction(func):
         def newLog(self, message):
             syslog.openlog(ident=self.identity, logoption=syslog.LOG_PERROR, facility=self.facility) # Make sure that all logs logged to the perror alongside normal syslog
-            func(self, message)
+            func(self, message) # type: ignore
             syslog.closelog()
         return newLog
     
-    @_logFunction
+    @_logFunction # type: ignore
     def logCriticalError(self, message: str):
         syslog.syslog(syslog.LOG_CRIT | self.facility, "CRITICAL - " + message)
 
-    @_logFunction
+    @_logFunction # type: ignore
     def logError(self, message: str):
         syslog.syslog(syslog.LOG_ERR | self.facility, "ERROR - " + message)
 
-    @_logFunction
+    @_logFunction # type: ignore
     def logWarning(self, message: str):
         syslog.syslog(syslog.LOG_WARNING | self.facility, "WARNING - " + message)
 
-    @_logFunction
+    @_logFunction # type: ignore
     def logDebug(self, message: str):
         syslog.syslog(syslog.LOG_DEBUG | self.facility, "DEBUG - " + message)
 

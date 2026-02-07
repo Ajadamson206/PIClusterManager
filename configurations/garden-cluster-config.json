@@ -1,0 +1,6 @@
+{
+    "db_loc": "/var/lib/garden/plot.db",
+    "port_num": 5000,
+    "host": "127.0.0.1",
+    "adapter": "wlan0"
+}

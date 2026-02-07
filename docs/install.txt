@@ -1,0 +1,54 @@
+1. Configuration Files /etc/garden/
+
+/etc/garden/
+    garden.conf
+    flask.conf
+    cluster-manager.conf
+    logging.conf
+    secrets.env      # root-only (0600)
+
+2. Executables / entry points -> /usr/local/bin/
+
+Put the launchable programs here.
+
+/usr/local/bin/
+    garden-cluster-manager
+    garden-web
+    garden-maintenance
+
+
+These should be:
+
+Thin wrappers or entry scripts
+
+Call into your real code in /usr/local/lib
+
+3. Application code -> /usr/local/lib/garden/
+
+/usr/local/lib/garden-cluster/
+    __init__.py
+    cluster_manager/
+    web/
+        app.py
+        routes/
+        templates/
+    devices/
+    db/
+    utils/
+
+4. Variable data (databases, runtime state) -> /var/lib/garden/
+
+/var/lib/garden/
+    plot.db
+    auth.db
+    cache/
+    device-state/
+
+5. systemd service files -> /etc/systemd/system/
+/etc/systemd/system/
+    garden-web.service
+    garden-cluster-manager.service
+
+Reference config in /etc/garden
+Execute binaries in /usr/local/bin
+Use WorkingDirectory=/usr/local/lib/garden
