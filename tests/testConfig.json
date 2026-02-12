@@ -2,5 +2,6 @@
     "db_loc": "build/sql.db",
     "port_num": 5000,
     "host": "127.0.0.1",
-    "adapter": "enp10s0"
+    "adapter": "enp10s0",
+    "time_state": "build/"
 }

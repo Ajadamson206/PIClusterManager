@@ -7,9 +7,10 @@ from pathlib import Path
 from logger import globalLogger
 import json
 from localapi import AdminPanel
+from timesaver import TimeSave
 
 class Listener:
-    def __init__(self, port: int, db_loc: str, host: str, adapter: str):
+    def __init__(self, port: int, db_loc: str, host: str, adapter: str, time_loc: str):
         self.port = port
         self.db_loc = db_loc
         self.host = host
@@ -35,10 +36,16 @@ class Listener:
         # Initialize the Admin Control
         self.admin = AdminPanel(self.db)
 
+        # Init the Time Saver
+        self.timer = TimeSave(time_loc)
+
+        # Restore Timer State
 
     def main_loop(self):
         # Main listening loop to handle incoming data
         while True:
+            self.timer.time_loop()
+
             connection, address = self.socket.accept()
 
             # None of the packets should be greater than 1024 bytes

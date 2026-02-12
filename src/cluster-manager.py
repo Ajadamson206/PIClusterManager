@@ -67,6 +67,7 @@ def main():
     port_num = config["port_num"]
     host = config["host"]
     adapter = config["adapter"]
+    time_loc = config["time_state"]
 
     # Determine the log level
     if "loglevel" in config and 0 <= config["loglevel"] <= 2:
@@ -83,7 +84,7 @@ def main():
         globalLogger.logWarning("Unknown loglevel: defaulting to 1")
 
     # Use Listener to handle incoming data
-    listener = Listener(port_num, db_loc, host, adapter)
+    listener = Listener(port_num, db_loc, host, adapter, time_loc)
     listener.main_loop()
 
 if __name__ == "__main__":
