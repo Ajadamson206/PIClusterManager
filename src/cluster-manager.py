@@ -56,7 +56,7 @@ def main():
     parser = argparse.ArgumentParser(
                         prog='Cluster-Manager',
                         description="Pi Cluster Manager for Raspberry Pi 4")
-    parser.add_argument('-c','--config', type=str, default="/etc/garden/config.json", help='Path to the configuration file')
+    parser.add_argument('-c','--config', type=str, default="/etc/garden/garden-cluster-config.json", help='Path to the configuration file')
     args = parser.parse_args()
 
     # Load configuration file

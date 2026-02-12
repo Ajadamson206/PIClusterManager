@@ -9,7 +9,7 @@ User=picos
 Group=picos
 
 WorkingDirectory=/usr/local/lib/garden-cluster
-ExecStart=/usr/local/bin/garden-cluster-manager.sh
+ExecStart=/usr/local/bin/garden-cluster-manager
 
 Restart=always
 RestartSec=2

@@ -31,7 +31,7 @@ echo "[*] Installing system dependencies..."
 # Debian/Raspberry Pi OS:
 if command -v apt-get >/dev/null 2>&1; then
   apt-get update
-  DEBIAN_FRONTEND=noninteractive apt-get install -y dnsmasq hostapd dhcpcd nftables
+  DEBIAN_FRONTEND=noninteractive apt-get install -y dnsmasq hostapd dhcpcd nftables python3-dev
 else
   echo "Unsupported distro: no apt-get found"
   exit 1
@@ -46,7 +46,7 @@ install -d -m 0755 /usr/local/bin
 install -d -m 0750 -o root -g "${APP_GROUP}" "${ETC_DIR}"
 install -d -m 0750 -o "${APP_USER}" -g "${APP_GROUP}" "${APP_DIR}"
 install -d -m 0750 -o "${APP_USER}" -g "${APP_GROUP}" "${APP_BIN_DIR}"
-install -d -m 0750 -o "${APP_USER}" -g "${APP_GROUP}" "${VAR_DIR}"
+install -d -m 0754 -o "${APP_USER}" -g "${APP_GROUP}" "${VAR_DIR}"
 install -d -m 0750 -o "${APP_USER}" -g "${APP_GROUP}" "${LOG_DIR}"
 
 echo "[*] Installing application code..."
@@ -60,7 +60,7 @@ install -m 0640 -o root -g "${APP_GROUP}" \
   "${ETC_DIR}/garden-cluster-config.json"
 
 echo "[*] Installing service launcher..."
-install -m 0750 -o root -g root \
+install -m 0550 -o picos -g picos \
   "${PROJECT_ROOT}/configurations/garden-cluster-manager" \
   "${APP_BIN_DIR}/garden-cluster-manager"
 
